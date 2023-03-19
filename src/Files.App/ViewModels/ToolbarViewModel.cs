@@ -682,6 +682,7 @@ namespace Files.App.ViewModels
 				else
 				{
 					currentInput = StorageFileExtensions.GetPathWithoutEnvironmentVariable(currentInput);
+					currentInput = StorageFileExtensions.GetPathWithoutRelativePathComponents(currentInput);
 					if (currentSelectedPath == currentInput)
 						return;
 
@@ -769,6 +770,7 @@ namespace Files.App.ViewModels
 				{
 					IList<ListedItem>? suggestions = null;
 					var expandedPath = StorageFileExtensions.GetPathWithoutEnvironmentVariable(sender.Text);
+					expandedPath = StorageFileExtensions.GetPathWithoutRelativePathComponents(expandedPath);
 					var folderPath = PathNormalization.GetParentDir(expandedPath) ?? expandedPath;
 					StorageFolderWithPath folder = await shellpage.FilesystemViewModel.GetFolderWithPathFromPathAsync(folderPath);
 

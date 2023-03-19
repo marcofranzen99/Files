@@ -145,6 +145,33 @@ namespace Files.App.Filesystem
 			return pathBoxItems;
 		}
 
+		public static string GetPathWithoutRelativePathComponents(string inputString)
+		{
+			var isFtpPath = FtpHelpers.IsFtpPath(inputString);
+
+			var pathSeperators = new string[] { "\\", "/" };
+			foreach (var seperator in pathSeperators)
+			{
+				Stack<string> pathComponents = new();
+				foreach (string input in inputString.Split(seperator))
+				{
+					if ("..".Equals(input))
+					{
+						// always keep the base drive/path as component
+						if (pathComponents.Count > 1 && (!isFtpPath || pathComponents.Count > 3))
+							pathComponents.Pop();
+					}
+					else if (!".".Equals(input))
+					{
+						pathComponents.Push(input);
+					}
+				}
+				inputString = string.Join(seperator, pathComponents.Reverse());
+			}
+
+			return inputString;
+		}
+
 		public static string GetPathWithoutEnvironmentVariable(string path)
 		{
 			if (path.StartsWith("~\\", StringComparison.Ordinal))
