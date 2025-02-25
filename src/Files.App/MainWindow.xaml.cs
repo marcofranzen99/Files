@@ -50,6 +50,8 @@ namespace Files.App
 
 		public async Task InitializeApplicationAsync(object activatedEventArgs)
 		{
+			Debugger.Launch();
+			var Logger = Ioc.Default.GetRequiredService<ILogger<App>>();
 			var rootFrame = EnsureWindowIsInitialized();
 
 			if (rootFrame is null)
@@ -58,6 +60,7 @@ namespace Files.App
 			// Set system backdrop
 			SystemBackdrop = new AppSystemBackdrop();
 
+				Logger.LogInformation($"0 " + Path.Join(Package.Current.InstalledLocation.Path, "Files.App", "Files.exe"));
 			switch (activatedEventArgs)
 			{
 				case ILaunchActivatedEventArgs launchArgs:
@@ -65,6 +68,7 @@ namespace Files.App
 						(CommandLineParser.SplitArguments(launchArgs.Arguments, true)[0].EndsWith($"files-dev.exe", StringComparison.OrdinalIgnoreCase)
 						|| CommandLineParser.SplitArguments(launchArgs.Arguments, true)[0].EndsWith($"files-dev", StringComparison.OrdinalIgnoreCase)))
 					{
+						Logger.LogInformation($"1 {launchArgs.Arguments}");
 						// WINUI3: When launching from commandline the argument is not ICommandLineActivatedEventArgs (#10370)
 						var ppm = CommandLineParser.ParseUntrustedCommands(launchArgs.Arguments);
 						if (ppm.IsEmpty())

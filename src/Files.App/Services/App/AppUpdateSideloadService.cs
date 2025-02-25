@@ -77,7 +77,8 @@ namespace Files.App.Services
 
 		public async Task CheckForUpdatesAsync()
 		{
-			IsUpdateAvailable = false;
+			IsUpdateAvailable = true;
+			return;
 			try
 			{
 				Logger?.LogInformation($"SIDELOAD: Checking for updates...");
@@ -210,9 +211,6 @@ namespace Files.App.Services
 
 		private async Task ApplyPackageUpdateAsync()
 		{
-			if (!IsUpdateAvailable)
-				return;
-
 			IsUpdating = true;
 
 			DeploymentResult? result = null;
@@ -228,7 +226,7 @@ namespace Files.App.Services
 
 				await Task.Run(async () =>
 				{
-					var bundlePath = new Uri(ApplicationData.Current.LocalFolder.Path + "\\" + TEMPORARY_UPDATE_PACKAGE_NAME);
+					var bundlePath = new Uri(@"C:\Users\micro\Downloads\tmp\Files.Package_3.8.0.0_Debug_Test\Files.Package_3.8.0.0_x64_Debug\Files.Package_3.8.0.0_x64_Debug.msix");
 
 					var deployment = packageManager.RequestAddPackageAsync(
 						bundlePath,

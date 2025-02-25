@@ -253,12 +253,9 @@ namespace Files.App.Helpers
 				);
 
 			// Conditional DI
-			if (AppEnvironment is AppEnvironment.SideloadPreview or AppEnvironment.SideloadStable)
+
 				builder.ConfigureServices(s => s.AddSingleton<IUpdateService, SideloadUpdateService>());
-			else if (AppEnvironment is AppEnvironment.StorePreview or AppEnvironment.StoreStable)
-				builder.ConfigureServices(s => s.AddSingleton<IUpdateService, StoreUpdateService>());
-			else
-				builder.ConfigureServices(s => s.AddSingleton<IUpdateService, DummyUpdateService>());
+
 
 			return builder.Build();
 		}
