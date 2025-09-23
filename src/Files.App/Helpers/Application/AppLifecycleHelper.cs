@@ -102,6 +102,9 @@ namespace Files.App.Helpers
 			var generalSettingsService = userSettingsService.GeneralSettingsService;
 			var jumpListService = Ioc.Default.GetRequiredService<IWindowsJumpListService>();
 
+			// Ensure cloud drives section is always collapsed on application start
+			generalSettingsService.IsCloudDriveSectionExpanded = false;
+
 			// Start off a list of tasks we need to run before we can continue startup
 			await Task.WhenAll(
 				OptionalTaskAsync(CloudDrivesManager.UpdateDrivesAsync(), generalSettingsService.ShowCloudDrivesSection),
